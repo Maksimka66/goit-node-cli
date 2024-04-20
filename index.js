@@ -1,4 +1,11 @@
 import { program } from "commander";
+import {
+  addContact,
+  getContactById,
+  removeContact,
+  listContacts,
+} from "./contacts.js";
+
 program
   .option("-a, --action <type>", "choose action")
   .option("-i, --id <type>", "user id")
@@ -10,25 +17,22 @@ program.parse();
 
 const options = program.opts();
 
-const contacts = require("./contacts");
-
-// TODO: рефакторити
 async function invokeAction({ action, id, name, email, phone }) {
   switch (action) {
     case "list":
-      // ...
+      console.table(await listContacts());
       break;
 
     case "get":
-      // ... id
+      console.log(await getContactById(id));
       break;
 
     case "add":
-      // ... name email phone
+      console.log(await addContact(name, email, phone));
       break;
 
     case "remove":
-      // ... id
+      console.log(await removeContact(id));
       break;
 
     default:
