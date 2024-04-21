@@ -15,6 +15,10 @@ export async function listContacts() {
   }
 }
 
+function writeContacts(contacts) {
+  return fs.writeFile(contactsPath, JSON.stringify(contacts, undefined, 2));
+}
+
 export async function getContactById(contactId) {
   const contacts = await listContacts();
   const markedContact = contacts.find((contact) => contact.id === contactId);
@@ -26,16 +30,23 @@ export async function removeContact(contactId) {
   const removedContactIndex = contacts.findIndex(
     (contact) => contact.id === contactId
   );
-  contacts.filter((contact) => contact.id !== contactId);
 
-  return removedContactIndex ? contacts[removedContactIndex] : null;
+  if (removedContactIndex === -1) {
+    return null;
+  }
+
+  const newList = contacts.filter((contact) => contact.id !== contactId);
+
+  writeContacts(newList);
+
+  return contacts[removedContactIndex];
 }
 
 export async function addContact(name, email, phone) {
   const contacts = await listContacts();
   const newContact = { id: crypto.randomUUID(), name, email, phone };
 
-  contacts.push(newContact);
+  writeContacts(contacts.push(newContact));
 
   return newContact;
 }
