@@ -31,15 +31,11 @@ export async function removeContact(contactId) {
     (contact) => contact.id === contactId
   );
 
-  if (removedContactIndex === -1) {
-    return null;
-  }
-
   const newList = contacts.filter((contact) => contact.id !== contactId);
 
   writeContacts(newList);
 
-  return contacts[removedContactIndex];
+  return removedContactIndex !== -1 ? contacts[removedContactIndex] : null;
 }
 
 export async function addContact(name, email, phone) {
