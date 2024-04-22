@@ -15,8 +15,16 @@ export async function listContacts() {
   }
 }
 
-function writeContacts(contacts) {
-  return fs.writeFile(contactsPath, JSON.stringify(contacts, undefined, 2));
+async function writeContacts(contacts) {
+  try {
+    const data = await fs.writeFile(
+      contactsPath,
+      JSON.stringify(contacts, undefined, 2)
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
 }
 
 export async function getContactById(contactId) {
