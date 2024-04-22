@@ -33,7 +33,7 @@ export async function removeContact(contactId) {
 
   const newList = contacts.filter((contact) => contact.id !== contactId);
 
-  writeContacts(newList);
+  await writeContacts(newList);
 
   return removedContactIndex !== -1 ? contacts[removedContactIndex] : null;
 }
@@ -42,7 +42,7 @@ export async function addContact(name, email, phone) {
   const contacts = await listContacts();
   const newContact = { id: crypto.randomUUID(), name, email, phone };
 
-  writeContacts(contacts.push(newContact));
+  await writeContacts([...contacts, newContact]);
 
   return newContact;
 }
